@@ -978,6 +978,8 @@ void SpirvEmitter::doDecl(const Decl *decl) {
     doClassTemplateDecl(classTemplateDecl);
   } else if (isa<FunctionTemplateDecl>(decl)) {
     // nothing to do.
+  } else if (isa<TypeAliasDecl>(decl)) {
+    // nothing to do.
   } else {
     emitError("decl type %0 unimplemented", decl->getLocation())
         << decl->getDeclKindName();
@@ -1691,15 +1693,8 @@ void SpirvEmitter::doRecordDecl(const RecordDecl *recordDecl) {
   if (recordDecl->isImplicit())
     return;
 
-  // Handle each static member with inline initializer.
-  // Each static member has a corresponding VarDecl inside the
-  // RecordDecl. For those defined in the translation unit,
-  // their VarDecls do not have initializer.
   for (auto *subDecl : recordDecl->decls()) {
-    if (auto *varDecl = dyn_cast<VarDecl>(subDecl)) {
-      if (varDecl->isStaticDataMember() && varDecl->hasInit())
-        doVarDecl(varDecl);
-    } else if (auto *enumDecl = dyn_cast<EnumDecl>(subDecl)) {
+    if (auto *enumDecl = dyn_cast<EnumDecl>(subDecl)) {
       doEnumDecl(enumDecl);
     }
   }

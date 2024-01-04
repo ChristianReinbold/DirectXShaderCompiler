@@ -4232,7 +4232,9 @@ DeclResultIdMapper::createRayTracingNVStageVar(spv::StorageClass sc,
 
 void DeclResultIdMapper::tryToCreateImplicitConstVar(const ValueDecl *decl) {
   const VarDecl *varDecl = dyn_cast<VarDecl>(decl);
-  if (!varDecl || !varDecl->isImplicit())
+  // Make sure to initialize static const members here.
+  bool isStatic = varDecl->isStaticDataMember() && varDecl->hasInit();
+  if (!varDecl || !(varDecl->isImplicit() || isStatic))
     return;
 
   APValue *val = varDecl->evaluateValue();
