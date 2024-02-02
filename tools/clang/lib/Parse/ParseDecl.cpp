@@ -5624,15 +5624,6 @@ void Parser::ParseTypeQualifierListOpt(DeclSpec &DS, unsigned AttrReqs,
       case tok::code_completion:
         Actions.CodeCompleteTypeQualifiers(DS);
         return cutOffParsing();
-      case tok::kw_const:
-        isInvalid = DS.SetTypeQual(DeclSpec::TQ_const, Loc, PrevSpec, DiagID,
-                                   getLangOpts());
-        if (isInvalid) {
-          assert(PrevSpec && "Method did not return previous specifier!");
-          Diag(Tok, DiagID) << PrevSpec;
-        }
-        EndLoc = ConsumeToken();
-        return;
       case tok::kw___attribute:
         if (AttrReqs & AR_GNUAttributesParsed) {
           ParseGNUAttributes(DS.getAttributes());
