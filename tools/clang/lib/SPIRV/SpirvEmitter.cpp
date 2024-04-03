@@ -980,6 +980,8 @@ void SpirvEmitter::doDecl(const Decl *decl) {
     // nothing to do.
   } else if (isa<TypeAliasDecl>(decl)) {
     // nothing to do.
+  } else if (isa<TypeAliasTemplateDecl>(decl)) {
+    // nothing to do.
   } else {
     emitError("decl type %0 unimplemented", decl->getLocation())
         << decl->getDeclKindName();
